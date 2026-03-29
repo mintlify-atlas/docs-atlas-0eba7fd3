@@ -1,0 +1,141 @@
+---
+title: "PokemonAbility"
+description: "Accessible layout components for displaying Pokémon abilities and their effects."
+---
+
+<Info>
+  PokemonAbility is currently in development. The API shown below reflects the planned design and is subject to change before the stable release.
+</Info>
+
+`PokemonAbility` provides readable layout components for presenting a Pokémon's abilities alongside their effect descriptions. Each Pokémon can have up to two regular ability slots and one hidden ability — `PokemonAbility` makes it easy to display all three in a consistent, accessible format.
+
+Abilities in the main series games each have a short flavor text (the in-game description) and a longer effect entry. This component surfaces both, with slot context so users understand whether they're looking at a standard or hidden ability.
+
+## Pokémon ability slots
+
+Every Pokémon species has a defined ability layout:
+
+| Slot   | Type    | Description |
+| ------ | ------- | ----------- |
+| 1      | Regular | The primary ability. All individuals of the species can have this. |
+| 2      | Regular | An alternative ability. Not all species have a second slot. |
+| Hidden | Special | A rarer ability only obtainable through specific in-game methods. Often more powerful or unusual. |
+
+## Planned usage
+
+```tsx
+import {
+  PokemonAbilityRoot,
+  PokemonAbilitySlot,
+  PokemonAbilityName,
+  PokemonAbilityDescription,
+} from "@/components/compo-dex/pokemon-ability";
+```
+
+### Rendering all abilities
+
+```tsx
+<PokemonAbilityRoot>
+  <PokemonAbilitySlot slot={1}>
+    <PokemonAbilityName>Overgrow</PokemonAbilityName>
+    <PokemonAbilityDescription>
+      Powers up Grass-type moves when the Pokémon's HP is low.
+    </PokemonAbilityDescription>
+  </PokemonAbilitySlot>
+
+  <PokemonAbilitySlot slot="hidden">
+    <PokemonAbilityName isHidden>Chlorophyll</PokemonAbilityName>
+    <PokemonAbilityDescription>
+      Boosts the Pokémon's Speed stat in harsh sunlight.
+    </PokemonAbilityDescription>
+  </PokemonAbilitySlot>
+</PokemonAbilityRoot>
+```
+
+### Sourcing from PokéAPI
+
+Ability data maps directly from the PokéAPI `/pokemon/{id}` response:
+
+```tsx
+const response = await fetch("https://pokeapi.co/api/v2/pokemon/1");
+const data = await response.json();
+
+// data.abilities shape:
+// [
+//   { slot: 1, is_hidden: false, ability: { name: "overgrow", url: "..." } },
+//   { slot: 3, is_hidden: true,  ability: { name: "chlorophyll", url: "..." } },
+// ]
+
+return (
+  <PokemonAbilityRoot>
+    {data.abilities.map((entry) => (
+      <PokemonAbilitySlot key={entry.ability.name} slot={entry.is_hidden ? "hidden" : entry.slot}>
+        <PokemonAbilityName isHidden={entry.is_hidden}>
+          {entry.ability.name}
+        </PokemonAbilityName>
+      </PokemonAbilitySlot>
+    ))}
+  </PokemonAbilityRoot>
+);
+```
+
+## Planned API
+
+### PokemonAbilityRoot
+
+The outermost wrapper that establishes the layout container for all ability entries.
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the root element.
+</ParamField>
+
+### PokemonAbilitySlot
+
+Represents a single ability slot. Renders contextual slot information (e.g., "Ability 1" or "Hidden Ability") alongside the ability content.
+
+<ParamField path="slot" type="1 | 2 | 'hidden'" required>
+  Identifies which ability slot this entry represents. Affects the slot label and visual treatment.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the slot container.
+</ParamField>
+
+### PokemonAbilityName
+
+Renders the ability name. Applies a distinct visual treatment when the ability is hidden.
+
+<ParamField path="isHidden" type="boolean" default="false">
+  When `true`, applies styling to indicate this is a hidden ability rather than a regular one.
+</ParamField>
+
+<ParamField path="children" type="React.ReactNode" required>
+  The ability name text.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the name element.
+</ParamField>
+
+### PokemonAbilityDescription
+
+Displays the flavor text or long effect entry for an ability.
+
+<ParamField path="children" type="React.ReactNode" required>
+  The ability description text. Can be a short flavor text string or a longer effect description.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the description element.
+</ParamField>
+
+---
+
+<CardGroup cols={2}>
+  <Card title="Evolution Chain" icon="diagram-successor" href="/components/evolution-chain">
+    Composable evolution tree components supporting branching paths and conditions.
+  </Card>
+  <Card title="PokemonCard" icon="table-list" href="/components/pokemon-card">
+    Card components for displaying Pokémon overview information in a scannable layout.
+  </Card>
+</CardGroup>

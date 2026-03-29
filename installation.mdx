@@ -1,0 +1,134 @@
+---
+title: "Installation"
+description: "Learn how to install and configure compo/dex components in your project."
+---
+
+## Prerequisites
+
+Before installing compo/dex, ensure your environment meets the following requirements:
+
+- **Node.js** version 18 or higher
+- A **React** project configured with **TypeScript**
+- **shadcn/ui** initialized in your project (CSS Variables mode)
+
+<Warning>
+  Make sure you have completed the official shadcn/ui setup before installing compo/dex. Tailwind CSS and base components must be properly configured.
+</Warning>
+
+<Note>
+  compo/dex currently supports only the CSS Variables version of shadcn/ui. The Tailwind utility class approach is not supported.
+</Note>
+
+Don't have a project yet? Use [shadcn/create](https://ui.shadcn.com/create) to scaffold a complete app with themes, components, and presets. Works with Next.js, Vite, and TanStack Start.
+
+## Installation
+
+<Steps>
+
+<Step title="Add the Compodex registry">
+
+To use shorthand install commands like `@compodex/component-name`, add the compo/dex registry to your `components.json` file:
+
+```json components.json
+{
+  "registries": {
+    "@compodex": "https://compodex.netlify.app/r/{name}.json"
+  }
+}
+```
+
+This tells the shadcn CLI where to resolve `@compodex` package names. You only need to do this once per project.
+
+</Step>
+
+<Step title="Install a component">
+
+Use the shadcn CLI to add compo/dex components. You can use the shorthand (recommended) or the direct URL.
+
+**Using shorthand (recommended)**
+
+<CodeGroup>
+
+```bash npm
+npx shadcn@latest add @compodex/pokemon-image
+```
+
+```bash pnpm
+pnpm dlx shadcn@latest add @compodex/pokemon-image
+```
+
+</CodeGroup>
+
+**Using direct URL**
+
+<CodeGroup>
+
+```bash npm
+npx shadcn@latest add https://compodex.netlify.app/r/pokemon-image.json
+```
+
+```bash pnpm
+pnpm dlx shadcn@latest add https://compodex.netlify.app/r/pokemon-image.json
+```
+
+</CodeGroup>
+
+The CLI copies the component file into your project at `components/compo-dex/pokemon-image.tsx` and installs any required dependencies.
+
+</Step>
+
+<Step title="Import and use the component">
+
+Once installed, import the component directly from your project:
+
+```tsx
+import {
+  PokemonImage,
+  PokemonSprite,
+  PokemonFallback,
+} from "@/components/compo-dex/pokemon-image";
+
+export function MyPokemon() {
+  return (
+    <PokemonImage size="lg">
+      <PokemonSprite
+        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+        alt="Pikachu"
+      />
+      <PokemonFallback />
+    </PokemonImage>
+  );
+}
+```
+
+</Step>
+
+</Steps>
+
+## Manual installation
+
+For advanced users who prefer not to use the CLI, you can copy the component source directly from the registry URL and place it in `components/compo-dex/` in your project.
+
+The registry endpoint for any component follows this pattern:
+
+```
+https://compodex.netlify.app/r/{name}.json
+```
+
+For example, to manually install `PokemonImage`, fetch:
+
+```
+https://compodex.netlify.app/r/pokemon-image.json
+```
+
+The JSON response contains the component source and its dependency list. You are responsible for installing the listed dependencies manually.
+
+<Note>
+  The CLI approach is recommended because it handles dependency installation automatically and places the file in the correct location.
+</Note>
+
+## Next steps
+
+<Card title="PokemonImage" icon="image" href="/components/pokemon-image">
+  Start with the PokemonImage component — display Pokémon sprites and official artwork with size variants and fallbacks.
+</Card>

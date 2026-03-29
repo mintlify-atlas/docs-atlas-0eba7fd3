@@ -1,97 +1,94 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Compodex"
+description: "A production-ready UI component library built on shadcn/ui for building Pokédex applications."
 ---
 
-## Setting up
+Compodex gives you composable, accessible React components specifically designed for Pokémon data. Built on top of shadcn/ui and Radix UI primitives, it handles the complexity of type systems, stat visualizations, evolution chains, and sprite rendering — so you can focus on building your app.
 
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Introduction" icon="book-open" href="/introduction">
+    Learn what Compodex is, why it exists, and the philosophy behind it.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Installation" icon="download" href="/installation">
+    Set up Compodex in your existing shadcn/ui project in minutes.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="PokemonImage" icon="image" href="/components/pokemon-image">
+    Display Pokémon sprites and official artwork with size variants and fallbacks.
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="All Components" icon="grid" href="/components/pokemon-badge">
+    Browse the full component library — badges, stats, charts, evolution chains, and more.
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## Get up and running
 
-Everything you need to create world-class documentation.
+<Steps>
+  <Step title="Set up shadcn/ui">
+    Compodex requires shadcn/ui with CSS Variables mode. If you don't have a project yet, use [shadcn/create](https://ui.shadcn.com/create) to scaffold one.
+  </Step>
+  <Step title="Add the Compodex registry">
+    Add the registry entry to your `components.json` so you can use shorthand install commands:
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+    ```json components.json
+    {
+      "registries": {
+        "@compodex": "https://compodex.netlify.app/r/{name}.json"
+      }
+    }
+    ```
+  </Step>
+  <Step title="Install your first component">
+    Use the shadcn CLI to add any Compodex component:
 
-## Need inspiration?
+    <CodeGroup>
+    ```bash npm
+    npx shadcn@latest add @compodex/pokemon-image
+    ```
+    ```bash pnpm
+    pnpm dlx shadcn@latest add @compodex/pokemon-image
+    ```
+    </CodeGroup>
+  </Step>
+  <Step title="Use it in your app">
+    Import and render the component with your Pokémon data:
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+    ```tsx
+    import { PokemonImage, PokemonSprite, PokemonFallback } from "@/components/compo-dex/pokemon-image";
+
+    export function MyPokemon() {
+      return (
+        <PokemonImage size="lg">
+          <PokemonSprite
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+            alt="Pikachu"
+          />
+          <PokemonFallback />
+        </PokemonImage>
+      );
+    }
+    ```
+  </Step>
+</Steps>
+
+## Component library
+
+<CardGroup cols={3}>
+  <Card title="PokemonImage" icon="image" href="/components/pokemon-image">
+    Sprite and artwork display with size variants
+  </Card>
+  <Card title="PokemonBadge" icon="tag" href="/components/pokemon-badge">
+    Semantic type badges for all 18+ Pokémon types
+  </Card>
+  <Card title="PokemonStats" icon="chart-bar" href="/components/pokemon-stats">
+    Normalized stat bars for clear comparisons
+  </Card>
+  <Card title="PokemonChart" icon="chart-line" href="/components/pokemon-chart">
+    Radar charts for visual stat distribution
+  </Card>
+  <Card title="Evolution Chain" icon="diagram-successor" href="/components/evolution-chain">
+    Composable evolution trees with branching support
+  </Card>
+  <Card title="PokemonCard" icon="rectangle-list" href="/components/pokemon-card">
+    Card components for Pokémon overviews
+  </Card>
+</CardGroup>

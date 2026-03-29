@@ -1,0 +1,220 @@
+---
+title: "PokemonImage"
+description: "Display Pokémon images with support for different official artwork variants and fallbacks."
+---
+
+`PokemonImage` is a compound component built on [Radix UI Avatar](https://www.radix-ui.com/primitives/docs/components/avatar) that renders Pokémon images from any sprite source — official artwork, front sprites, shiny variants — with a graceful fallback when an image fails to load or is unavailable.
+
+## Installation
+
+<Steps>
+  <Step title="Run the CLI command">
+    Use the shadcn CLI to add the component directly to your project.
+
+    <CodeGroup>
+
+    ```bash npm
+    npx shadcn@latest add @compodex/pokemon-image
+    ```
+
+    ```bash pnpm
+    pnpm dlx shadcn@latest add @compodex/pokemon-image
+    ```
+
+    </CodeGroup>
+
+    Or install from the direct registry URL:
+
+    <CodeGroup>
+
+    ```bash npm
+    npx shadcn@latest add https://compodex.netlify.app/r/pokemon-image.json
+    ```
+
+    ```bash pnpm
+    pnpm dlx shadcn@latest add https://compodex.netlify.app/r/pokemon-image.json
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Import the component">
+    ```tsx
+    import {
+      PokemonImage,
+      PokemonSprite,
+      PokemonFallback,
+    } from "@/components/compo-dex/pokemon-image";
+    ```
+  </Step>
+</Steps>
+
+## Usage
+
+```tsx
+import {
+  PokemonImage,
+  PokemonSprite,
+  PokemonFallback,
+} from "@/components/compo-dex/pokemon-image";
+```
+
+```tsx
+<PokemonImage>
+  <PokemonSprite
+    src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
+    alt="Bulbasaur"
+  />
+  <PokemonFallback />
+</PokemonImage>
+```
+
+## API reference
+
+### PokemonImage
+
+The root container. Extends all props from [`Avatar.Root`](https://www.radix-ui.com/primitives/docs/components/avatar#root).
+
+<ParamField path="size" type='"sm" | "md" | "lg" | "xl"' default='"md"'>
+  Controls the rendered dimensions of the image container.
+
+  | Value | Size |
+  | ----- | ---- |
+  | `sm`  | 48px (3rem) |
+  | `md`  | 128px (8rem) |
+  | `lg`  | 160px (10rem) |
+  | `xl`  | 192px (12rem) |
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the root element.
+</ParamField>
+
+### PokemonSprite
+
+Renders the actual image. Extends all props from [`Avatar.Image`](https://www.radix-ui.com/primitives/docs/components/avatar#image), including `src`, `alt`, and `onLoadingStatusChange`.
+
+<ParamField path="src" type="string" required>
+  The URL of the Pokémon sprite or artwork to display.
+</ParamField>
+
+<ParamField path="alt" type="string" required>
+  Accessible alt text for the image (typically the Pokémon's name).
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the image element.
+</ParamField>
+
+### PokemonFallback
+
+Shown while the image is loading or when it fails to load. Extends all props from [`Avatar.Fallback`](https://www.radix-ui.com/primitives/docs/components/avatar#fallback).
+
+<ParamField path="isError" type="boolean" default="false">
+  When `true`, applies a red background to visually signal a failed load rather than a pending state.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the fallback element.
+</ParamField>
+
+## Examples
+
+### Basic usage
+
+Render Pokémon official artwork sourced from the PokéAPI sprite repository. The `PokemonFallback` handles the loading state automatically.
+
+```tsx
+import {
+  PokemonImage,
+  PokemonSprite,
+  PokemonFallback,
+} from "@/components/compo-dex/pokemon-image";
+
+function PokemonImageBasicUsage() {
+  const pokemon = {
+    name: "Zacian",
+    sprites: {
+      front_default:
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/891.png",
+      other: {
+        "official-artwork": {
+          front_default:
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/82.png",
+          front_shiny:
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/82.png",
+        },
+      },
+    },
+  };
+
+  return (
+    <div className="flex flex-col gap-4 items-center justify-center">
+      <PokemonImage size="lg">
+        <PokemonSprite
+          src={pokemon?.sprites?.other?.["official-artwork"]?.front_default}
+          alt={pokemon?.name}
+        />
+        <PokemonFallback className="absolute inset-0 z-10" />
+      </PokemonImage>
+    </div>
+  );
+}
+```
+
+### Size variants
+
+Use the `size` prop to display the image at different preset dimensions. All four sizes maintain a square aspect ratio.
+
+```tsx
+import {
+  PokemonImage,
+  PokemonSprite,
+  PokemonFallback,
+} from "@/components/compo-dex/pokemon-image";
+
+function PokemonImageSize() {
+  return (
+    <div className="flex flex-row gap-4 items-center justify-center">
+      <PokemonImage size="sm">
+        <PokemonSprite
+          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
+          alt="Bulbasaur"
+        />
+        <PokemonFallback className="absolute inset-0 z-10" />
+      </PokemonImage>
+      <PokemonImage size="md">
+        <PokemonSprite
+          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
+          alt="Bulbasaur"
+        />
+        <PokemonFallback className="absolute inset-0 z-10" />
+      </PokemonImage>
+      <PokemonImage size="lg">
+        <PokemonSprite
+          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
+          alt="Bulbasaur"
+        />
+        <PokemonFallback className="absolute inset-0 z-10" />
+      </PokemonImage>
+      <PokemonImage size="xl">
+        <PokemonSprite
+          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
+          alt="Bulbasaur"
+        />
+        <PokemonFallback className="absolute inset-0 z-10" />
+      </PokemonImage>
+    </div>
+  );
+}
+```
+
+---
+
+<CardGroup cols={2}>
+  <Card title="PokemonBadge" icon="tag" href="/components/pokemon-badge">
+    Semantic type badges for all 18+ Pokémon types with consistent color coding.
+  </Card>
+  <Card title="PokemonCard" icon="table-list" href="/components/pokemon-card">
+    Card components for displaying Pokémon overview information in a scannable layout.
+  </Card>
+</CardGroup>

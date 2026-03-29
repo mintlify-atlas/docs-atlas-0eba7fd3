@@ -1,0 +1,97 @@
+---
+title: "PokemonChart"
+description: "Radar and bar charts for visualizing Pokémon stat distribution."
+---
+
+<Info>
+  PokemonChart is currently in development. The API shown below reflects the planned design and is subject to change before the stable release.
+</Info>
+
+`PokemonChart` renders a hexagonal radar chart (also called a spider chart) that plots all six Pokémon base stats — HP, Attack, Defense, Special Attack, Special Defense, and Speed — across six axes. This gives an at-a-glance picture of a Pokémon's overall stat distribution and relative strengths.
+
+The chart is built on top of a charting primitive and accepts a normalized `stats` array sourced directly from the PokéAPI response format.
+
+## Planned usage
+
+```tsx
+import { PokemonChart } from "@/components/compo-dex/pokemon-chart";
+```
+
+```tsx
+<PokemonChart
+  stats={[
+    { name: "hp", value: 80 },
+    { name: "attack", value: 120 },
+    { name: "defense", value: 70 },
+    { name: "special-attack", value: 110 },
+    { name: "special-defense", value: 80 },
+    { name: "speed", value: 100 },
+  ]}
+  mode="radar"
+  language="en"
+/>
+```
+
+### Sourcing stats from PokéAPI
+
+The `stats` array maps directly to the `base_stat` values returned by the PokéAPI `/pokemon/{id}` endpoint:
+
+```tsx
+const response = await fetch("https://pokeapi.co/api/v2/pokemon/6");
+const data = await response.json();
+
+const stats = data.stats.map((s) => ({
+  name: s.stat.name,   // e.g. "hp", "attack", "special-attack"
+  value: s.base_stat,  // e.g. 78
+}));
+
+return <PokemonChart stats={stats} mode="radar" language="en" />;
+```
+
+## Planned API
+
+### PokemonChart
+
+<ParamField path="stats" type="{ name: string; value: number }[]" required>
+  An array of exactly six stat objects, each with a `name` and a numeric `value`. Stat names should match PokéAPI's naming convention: `"hp"`, `"attack"`, `"defense"`, `"special-attack"`, `"special-defense"`, `"speed"`.
+</ParamField>
+
+<ParamField path="mode" type='"radar"' default='"radar"'>
+  The chart type to render. Currently `"radar"` is planned as the primary mode, rendering a hexagonal spider chart. Additional modes may be introduced in future releases.
+</ParamField>
+
+<ParamField path="language" type="string" default='"en"'>
+  BCP 47 language code for stat axis labels. Controls how axis labels like "HP" or "Sp. Atk" are rendered in localised form.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the chart container.
+</ParamField>
+
+## Stat axes
+
+The radar chart plots six axes corresponding to the standard base stats:
+
+| Axis label       | PokéAPI `name` key  |
+| ---------------- | ------------------- |
+| HP               | `hp`                |
+| Attack           | `attack`            |
+| Defense          | `defense`           |
+| Sp. Atk          | `special-attack`    |
+| Sp. Def          | `special-defense`   |
+| Speed            | `speed`             |
+
+<Tip>
+  Pair `PokemonChart` with `PokemonStats` to give users both a visual radar overview and a detailed numeric breakdown of each stat on the same page.
+</Tip>
+
+---
+
+<CardGroup cols={2}>
+  <Card title="PokemonStats" icon="chart-bar" href="/components/pokemon-stats">
+    Normalized stat bars for visualizing Pokémon base stats.
+  </Card>
+  <Card title="Evolution Chain" icon="diagram-successor" href="/components/evolution-chain">
+    Composable evolution tree components supporting branching paths and conditions.
+  </Card>
+</CardGroup>

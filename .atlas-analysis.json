@@ -1,0 +1,59 @@
+{
+  "projectType": "frontend",
+  "projectName": "Compodex",
+  "projectDescription": "A production-ready UI component library built on shadcn/ui for building Pokédex applications, providing composable React components for Pokémon data display.",
+  "theme": "willow",
+  "primaryColor": "#7c7c7c",
+  "lightColor": "#070707",
+  "darkColor": "#d7d7d7",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation"
+            ]
+          },
+          {
+            "group": "Components",
+            "pages": [
+              "components/pokemon-image",
+              "components/pokemon-badge",
+              "components/pokemon-stats",
+              "components/pokemon-chart",
+              "components/evolution-chain",
+              "components/pokemon-ability",
+              "components/pokemon-card"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Composable Pokémon-specific React components built on shadcn/ui and Radix UI primitives",
+    "PokemonImage component with size variants (sm, md, lg, xl) and fallback support",
+    "Semantic type badges for all 18+ Pokémon types with consistent styling",
+    "Normalized stat bars and radar chart visualizations for Pokémon stat data",
+    "Evolution chain components supporting branching paths and conditions",
+    "Headless-first design — bring your own data source (PokéAPI, custom backend, static JSON)",
+    "Full TypeScript support with proper type inference",
+    "Accessible components with semantic HTML and keyboard navigation",
+    "shadcn registry integration for easy CLI installation"
+  ],
+  "publicApiSurface": [
+    "PokemonImage — avatar-based image container with size variants",
+    "PokemonSprite — image element with object-contain and transition",
+    "PokemonFallback — fallback state with optional error styling",
+    "PokemonBadge — type badge with semantic color variants",
+    "PokemonStat / PokemonStatRoot / PokemonStatLabel / PokemonStatBar — stat display components",
+    "PokemonChart — radar/bar chart for stat distribution",
+    "EvolutionRoot / EvolutionContent / EvolutionNode / EvolutionGroup / EvolutionBranch / EvolutionTrigger — evolution chain primitives",
+    "PokemonAbility — ability display layout",
+    "PokemonCard — card component for Pokémon overview display"
+  ]
+}

@@ -1,0 +1,101 @@
+---
+title: "PokemonBadge"
+description: "Semantic type badges for all 18+ Pokémon types with consistent color coding."
+---
+
+<Info>
+  PokemonBadge is currently in development. The API shown below reflects the planned design and is subject to change before the stable release.
+</Info>
+
+`PokemonBadge` renders a styled inline badge representing one of the 18 official Pokémon types. Each type has a semantically consistent color derived from the games and Trading Card Game conventions, making type information immediately recognizable at a glance.
+
+Use it alongside `PokemonImage` or `PokemonCard` to display a Pokémon's typing in grids, detail pages, or search results.
+
+## Planned usage
+
+```tsx
+import { PokemonBadge } from "@/components/compo-dex/pokemon-badge";
+```
+
+```tsx
+<PokemonBadge type="fire">Fire</PokemonBadge>
+<PokemonBadge type="water" variant="secondary">Water</PokemonBadge>
+```
+
+### Rendering multiple types
+
+Most Pokémon have one or two types. Render them side by side:
+
+```tsx
+<div className="flex gap-2">
+  <PokemonBadge type="fire">Fire</PokemonBadge>
+  <PokemonBadge type="flying">Flying</PokemonBadge>
+</div>
+```
+
+## Planned API
+
+### PokemonBadge
+
+<ParamField path="type" type="PokemonType" required>
+  The Pokémon type that determines the badge's color and label. Must be one of the 18 canonical types (see table below).
+</ParamField>
+
+<ParamField path="variant" type='"default" | "secondary" | "ghost" | "outline"' default='"default"'>
+  Controls the visual style of the badge. `default` renders a filled badge using the type's color. Other variants reduce emphasis for secondary or decorative use.
+</ParamField>
+
+<ParamField path="children" type="React.ReactNode">
+  The label displayed inside the badge. Typically the type name (e.g., `"Fire"`) but can be any short string.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the badge element.
+</ParamField>
+
+## Pokémon types
+
+All 18 types from the main series games are supported:
+
+| Type     | Type      | Type     |
+| -------- | --------- | -------- |
+| Normal   | Fighting  | Flying   |
+| Poison   | Ground    | Rock     |
+| Bug      | Ghost     | Steel    |
+| Fire     | Water     | Grass    |
+| Electric | Psychic   | Ice      |
+| Dragon   | Dark      | Fairy    |
+
+```tsx
+// All 18 type values accepted by the `type` prop
+type PokemonType =
+  | "normal"
+  | "fire"
+  | "water"
+  | "grass"
+  | "electric"
+  | "ice"
+  | "fighting"
+  | "poison"
+  | "ground"
+  | "flying"
+  | "psychic"
+  | "bug"
+  | "rock"
+  | "ghost"
+  | "dragon"
+  | "dark"
+  | "steel"
+  | "fairy";
+```
+
+---
+
+<CardGroup cols={2}>
+  <Card title="PokemonImage" icon="image" href="/components/pokemon-image">
+    Display Pokémon images with support for different official artwork variants and fallbacks.
+  </Card>
+  <Card title="PokemonStats" icon="chart-bar" href="/components/pokemon-stats">
+    Normalized stat bars for visualizing Pokémon base stats.
+  </Card>
+</CardGroup>

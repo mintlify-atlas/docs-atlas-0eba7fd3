@@ -1,0 +1,195 @@
+---
+title: "Evolution Chain"
+description: "Composable evolution tree components supporting branching paths and conditions."
+---
+
+<Info>
+  Evolution Chain is currently in development. The API shown below reflects the planned design and is subject to change before the stable release.
+</Info>
+
+`EvolutionChain` is a set of composable primitives for rendering Pokémon evolution trees. It supports linear evolutions, branching evolutions (where one Pokémon can evolve into multiple forms), and annotated trigger conditions like level thresholds, held items, or friendship.
+
+The compound component pattern gives you full control over layout and content while the primitives handle the structural relationships between evolution stages.
+
+## Planned usage
+
+```tsx
+import {
+  EvolutionRoot,
+  EvolutionContent,
+  EvolutionNode,
+  EvolutionGroup,
+  EvolutionBranch,
+  EvolutionTrigger,
+} from "@/components/compo-dex/evolution-chain";
+```
+
+### Linear evolution
+
+A simple three-stage chain with level-up triggers:
+
+```tsx
+<EvolutionRoot>
+  <EvolutionContent>
+    <EvolutionNode
+      size="md"
+      name="Charmander"
+      image="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png"
+      types={["fire"]}
+    />
+    <EvolutionGroup>
+      <EvolutionBranch>
+        <EvolutionTrigger type="level" value={16} />
+        <EvolutionNode
+          size="md"
+          name="Charmeleon"
+          image="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png"
+          types={["fire"]}
+        />
+      </EvolutionBranch>
+    </EvolutionGroup>
+    <EvolutionGroup>
+      <EvolutionBranch>
+        <EvolutionTrigger type="level" value={36} />
+        <EvolutionNode
+          size="md"
+          name="Charizard"
+          image="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png"
+          types={["fire", "flying"]}
+        />
+      </EvolutionBranch>
+    </EvolutionGroup>
+  </EvolutionContent>
+</EvolutionRoot>
+```
+
+### Branching evolution
+
+Some Pokémon evolve into multiple different forms depending on conditions. Use multiple `EvolutionBranch` elements inside a single `EvolutionGroup` to represent this:
+
+```tsx
+<EvolutionRoot>
+  <EvolutionContent>
+    <EvolutionNode
+      size="md"
+      name="Eevee"
+      image="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png"
+      types={["normal"]}
+    />
+    <EvolutionGroup>
+      <EvolutionBranch>
+        <EvolutionTrigger type="item" value="Fire Stone" />
+        <EvolutionNode
+          size="md"
+          name="Flareon"
+          image="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/136.png"
+          types={["fire"]}
+        />
+      </EvolutionBranch>
+      <EvolutionBranch>
+        <EvolutionTrigger type="item" value="Water Stone" />
+        <EvolutionNode
+          size="md"
+          name="Vaporeon"
+          image="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/134.png"
+          types={["water"]}
+        />
+      </EvolutionBranch>
+      <EvolutionBranch>
+        <EvolutionTrigger type="item" value="Thunder Stone" />
+        <EvolutionNode
+          size="md"
+          name="Jolteon"
+          image="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/135.png"
+          types={["electric"]}
+        />
+      </EvolutionBranch>
+    </EvolutionGroup>
+  </EvolutionContent>
+</EvolutionRoot>
+```
+
+## Planned API
+
+### EvolutionRoot
+
+The outermost container that establishes layout context for the evolution tree.
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the root element.
+</ParamField>
+
+### EvolutionContent
+
+A horizontal (or vertical) flex container that holds all nodes and groups in a single evolution line.
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the content container.
+</ParamField>
+
+### EvolutionNode
+
+Renders a single Pokémon in the chain, including its sprite, name, and type badges.
+
+<ParamField path="name" type="string" required>
+  The Pokémon's display name shown below the image.
+</ParamField>
+
+<ParamField path="image" type="string" required>
+  URL of the Pokémon's sprite or official artwork.
+</ParamField>
+
+<ParamField path="types" type="string[]" required>
+  Array of one or two type strings (e.g., `["fire"]` or `["fire", "flying"]`) used to render type badges beneath the name.
+</ParamField>
+
+<ParamField path="size" type='"sm" | "md" | "lg"' default='"md"'>
+  Controls the size of the Pokémon image within the node.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the node element.
+</ParamField>
+
+### EvolutionGroup
+
+Groups one or more `EvolutionBranch` elements that share the same source Pokémon. When multiple branches are present, the component renders them stacked to indicate branching paths.
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the group container.
+</ParamField>
+
+### EvolutionBranch
+
+Represents a single possible evolution path. Contains exactly one `EvolutionTrigger` and one `EvolutionNode`.
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the branch container.
+</ParamField>
+
+### EvolutionTrigger
+
+Displays the condition required to trigger an evolution (e.g., level, held item, friendship).
+
+<ParamField path="type" type='"level" | "item" | "friendship" | "trade" | "other"' required>
+  The category of evolution trigger, which controls the icon and label style rendered.
+</ParamField>
+
+<ParamField path="value" type="number | string">
+  The specific trigger value — a level number for `"level"`, an item name for `"item"`, etc.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the trigger element.
+</ParamField>
+
+---
+
+<CardGroup cols={2}>
+  <Card title="PokemonChart" icon="chart-line" href="/components/pokemon-chart">
+    Radar and bar charts for visualizing Pokémon stat distribution.
+  </Card>
+  <Card title="PokemonAbility" icon="bolt" href="/components/pokemon-ability">
+    Accessible layout components for displaying Pokémon abilities and their effects.
+  </Card>
+</CardGroup>

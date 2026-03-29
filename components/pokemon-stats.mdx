@@ -1,0 +1,147 @@
+---
+title: "PokemonStats"
+description: "Normalized stat bars for visualizing Pokémon base stats."
+---
+
+<Info>
+  PokemonStats is currently in development. The API shown below reflects the planned design and is subject to change before the stable release.
+</Info>
+
+`PokemonStats` is a compound component that renders the six base stats of a Pokémon — HP, Attack, Defense, Sp. Atk, Sp. Def, and Speed — as a set of labeled progress bars. Each bar is normalized against a configurable maximum value so comparisons between Pokémon are meaningful and visually consistent.
+
+## Planned usage
+
+```tsx
+import {
+  PokemonStat,
+  PokemonStatRoot,
+  PokemonStatLabel,
+  PokemonStatBar,
+} from "@/components/compo-dex/pokemon-stats";
+```
+
+```tsx
+<PokemonStat maxValue={200} language="en">
+  <PokemonStatRoot>
+    <PokemonStatLabel name="HP" value={70} />
+    <PokemonStatBar value={70} />
+  </PokemonStatRoot>
+  <PokemonStatRoot>
+    <PokemonStatLabel name="Attack" value={170} />
+    <PokemonStatBar value={170} />
+  </PokemonStatRoot>
+</PokemonStat>
+```
+
+### All six base stats
+
+```tsx
+<PokemonStat maxValue={255} language="en">
+  <PokemonStatRoot>
+    <PokemonStatLabel name="HP" value={45} />
+    <PokemonStatBar value={45} />
+  </PokemonStatRoot>
+  <PokemonStatRoot>
+    <PokemonStatLabel name="Attack" value={49} />
+    <PokemonStatBar value={49} />
+  </PokemonStatRoot>
+  <PokemonStatRoot>
+    <PokemonStatLabel name="Defense" value={49} />
+    <PokemonStatBar value={49} />
+  </PokemonStatRoot>
+  <PokemonStatRoot>
+    <PokemonStatLabel name="Sp. Atk" value={65} />
+    <PokemonStatBar value={65} />
+  </PokemonStatRoot>
+  <PokemonStatRoot>
+    <PokemonStatLabel name="Sp. Def" value={65} />
+    <PokemonStatBar value={65} />
+  </PokemonStatRoot>
+  <PokemonStatRoot>
+    <PokemonStatLabel name="Speed" value={45} />
+    <PokemonStatBar value={45} />
+  </PokemonStatRoot>
+</PokemonStat>
+```
+
+## Planned API
+
+### PokemonStat
+
+The outermost wrapper. Provides context (max value, language) to all child stat rows.
+
+<ParamField path="maxValue" type="number" default="255">
+  The value used as 100% fill for all `PokemonStatBar` children. The standard Pokémon maximum is `255` (the highest possible base stat value). Lower values scale bars relative to a custom ceiling.
+</ParamField>
+
+<ParamField path="language" type="string" default='"en"'>
+  BCP 47 language code used when rendering localized stat labels. Supported values depend on available translations (e.g., `"en"`, `"ja"`, `"fr"`).
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the container element.
+</ParamField>
+
+### PokemonStatRoot
+
+A single row grouping a label and its corresponding bar. Acts as the layout container for one stat entry.
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the row element.
+</ParamField>
+
+### PokemonStatLabel
+
+Displays the stat name and its numeric value.
+
+<ParamField path="name" type="string" required>
+  The display name of the stat (e.g., `"HP"`, `"Attack"`, `"Sp. Def"`).
+</ParamField>
+
+<ParamField path="value" type="number" required>
+  The numeric base stat value shown next to the label.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the label element.
+</ParamField>
+
+### PokemonStatBar
+
+Renders the filled progress bar for a single stat, normalized against the `maxValue` provided by `PokemonStat`.
+
+<ParamField path="value" type="number" required>
+  The base stat value. The bar fills to `value / maxValue * 100%`.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the bar element.
+</ParamField>
+
+## The six base stats
+
+Every Pokémon in the main series has exactly these six base stats:
+
+| Stat name       | Common abbreviation | Maximum possible value |
+| --------------- | ------------------- | ---------------------- |
+| HP              | HP                  | 255                    |
+| Attack          | Atk                 | 190                    |
+| Defense         | Def                 | 250                    |
+| Special Attack  | Sp. Atk             | 194                    |
+| Special Defense | Sp. Def             | 250                    |
+| Speed           | Spe                 | 200                    |
+
+<Tip>
+  Set `maxValue` to `255` to normalize bars against the highest theoretical stat value in the game. This gives visually accurate comparisons across any Pokémon.
+</Tip>
+
+---
+
+<CardGroup cols={2}>
+  <Card title="PokemonBadge" icon="tag" href="/components/pokemon-badge">
+    Semantic type badges for all 18+ Pokémon types with consistent color coding.
+  </Card>
+  <Card title="PokemonChart" icon="chart-line" href="/components/pokemon-chart">
+    Radar and bar charts for visualizing Pokémon stat distribution.
+  </Card>
+</CardGroup>

@@ -1,0 +1,171 @@
+---
+title: "PokemonCard"
+description: "Card components for displaying Pokémon overview information in a scannable layout."
+---
+
+<Info>
+  PokemonCard is currently in development. The API shown below reflects the planned design and is subject to change before the stable release.
+</Info>
+
+`PokemonCard` provides a structured card layout for surfacing key Pokémon information — national Pokédex number, name, official artwork, and type badges — in a compact, scannable format.
+
+Cards are the right component when you need to display many Pokémon at once: search results, filtered Pokédex grids, team builders, or category pages. They are designed to compose directly with `PokemonImage` for the artwork and `PokemonBadge` for the type chips.
+
+## Planned usage
+
+```tsx
+import {
+  PokemonCard,
+  PokemonCardImage,
+  PokemonCardHeader,
+  PokemonCardNumber,
+  PokemonCardName,
+  PokemonCardTypes,
+} from "@/components/compo-dex/pokemon-card";
+```
+
+### Basic card
+
+```tsx
+<PokemonCard>
+  <PokemonCardImage
+    src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+    alt="Pikachu"
+  />
+  <PokemonCardHeader>
+    <PokemonCardNumber>#025</PokemonCardNumber>
+    <PokemonCardName>Pikachu</PokemonCardName>
+    <PokemonCardTypes types={["electric"]} />
+  </PokemonCardHeader>
+</PokemonCard>
+```
+
+### Grid of cards
+
+Compose cards in a responsive grid for a Pokédex-style listing:
+
+```tsx
+<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+  {pokemonList.map((pokemon) => (
+    <PokemonCard key={pokemon.id}>
+      <PokemonCardImage
+        src={pokemon.sprites.other["official-artwork"].front_default}
+        alt={pokemon.name}
+      />
+      <PokemonCardHeader>
+        <PokemonCardNumber>#{String(pokemon.id).padStart(3, "0")}</PokemonCardNumber>
+        <PokemonCardName>{pokemon.name}</PokemonCardName>
+        <PokemonCardTypes types={pokemon.types.map((t) => t.type.name)} />
+      </PokemonCardHeader>
+    </PokemonCard>
+  ))}
+</div>
+```
+
+### Composing with PokemonImage
+
+`PokemonCardImage` is a thin wrapper around `PokemonImage`. You can use the full compound component directly for more control:
+
+```tsx
+import { PokemonImage, PokemonSprite, PokemonFallback } from "@/components/compo-dex/pokemon-image";
+
+<PokemonCard>
+  <PokemonImage size="lg">
+    <PokemonSprite
+      src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png"
+      alt="Charizard"
+    />
+    <PokemonFallback />
+  </PokemonImage>
+  <PokemonCardHeader>
+    <PokemonCardNumber>#006</PokemonCardNumber>
+    <PokemonCardName>Charizard</PokemonCardName>
+    <PokemonCardTypes types={["fire", "flying"]} />
+  </PokemonCardHeader>
+</PokemonCard>
+```
+
+## Planned API
+
+### PokemonCard
+
+The root container element. Renders a styled card with consistent border, background, and hover state.
+
+<ParamField path="href" type="string">
+  When provided, wraps the card in a link. Use for navigating to a full Pokémon detail page.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the card element.
+</ParamField>
+
+### PokemonCardImage
+
+A convenience wrapper that renders a `PokemonImage` pre-configured for the card context.
+
+<ParamField path="src" type="string" required>
+  URL of the Pokémon sprite or official artwork.
+</ParamField>
+
+<ParamField path="alt" type="string" required>
+  Accessible alt text for the image, typically the Pokémon's name.
+</ParamField>
+
+<ParamField path="size" type='"sm" | "md" | "lg" | "xl"' default='"md"'>
+  Size of the image. Passed directly to the underlying `PokemonImage` component.
+</ParamField>
+
+### PokemonCardHeader
+
+A layout container for the card's text content: number, name, and type badges.
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the header element.
+</ParamField>
+
+### PokemonCardNumber
+
+Renders the formatted Pokédex number (e.g., `#001`).
+
+<ParamField path="children" type="React.ReactNode" required>
+  The formatted number string. Pad with `String(id).padStart(3, "0")` for consistent three-digit formatting.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the number element.
+</ParamField>
+
+### PokemonCardName
+
+Renders the Pokémon's display name.
+
+<ParamField path="children" type="React.ReactNode" required>
+  The Pokémon name string.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the name element.
+</ParamField>
+
+### PokemonCardTypes
+
+Renders a row of `PokemonBadge` components for each type in the provided array.
+
+<ParamField path="types" type="string[]" required>
+  Array of one or two Pokémon type strings (e.g., `["fire"]` or `["water", "flying"]`).
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged onto the types container.
+</ParamField>
+
+---
+
+<CardGroup cols={2}>
+  <Card title="PokemonImage" icon="image" href="/components/pokemon-image">
+    Display Pokémon images with support for different official artwork variants and fallbacks.
+  </Card>
+  <Card title="PokemonBadge" icon="tag" href="/components/pokemon-badge">
+    Semantic type badges for all 18+ Pokémon types with consistent color coding.
+  </Card>
+</CardGroup>
